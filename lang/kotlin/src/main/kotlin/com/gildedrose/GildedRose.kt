@@ -14,19 +14,15 @@ class GildedRose(private val items: List<Item>) {
             }
         } else {
             if (item.quality < 50) {
-                item.quality = item.quality + 1
+                incrementQuality(item)
 
                 if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
                     if (item.sellIn < 11) {
-                        if (item.quality < 50) {
-                            item.quality = item.quality + 1
-                        }
+                        incrementQuality(item)
                     }
 
                     if (item.sellIn < 6) {
-                        if (item.quality < 50) {
-                            item.quality = item.quality + 1
-                        }
+                        incrementQuality(item)
                     }
                 }
             }
@@ -48,10 +44,14 @@ class GildedRose(private val items: List<Item>) {
                     item.quality = item.quality - item.quality
                 }
             } else {
-                if (item.quality < 50) {
-                    item.quality = item.quality + 1
-                }
+                incrementQuality(item)
             }
+        }
+    }
+
+    private fun incrementQuality(item: Item) {
+        if (item.quality < 50) {
+            item.quality = item.quality + 1
         }
     }
 }
