@@ -41,7 +41,7 @@ class GildedRose(private val items: List<Item>) {
                         }
                     }
                 } else {
-                    item.quality = item.quality - item.quality
+                    item.quality = 0
                 }
             } else {
                 incrementQuality(item)
