@@ -6,7 +6,7 @@ import kotlin.math.min
 class GildedRose(private val items: List<Item>) {
     fun updateItems() {
         items.forEach { item ->
-            updateItem(item).also { (_, quality, sellIn) ->
+            updateItem(item).also { (quality, sellIn) ->
                 item.quality = quality
                 item.sellIn = sellIn
             }
@@ -14,39 +14,24 @@ class GildedRose(private val items: List<Item>) {
     }
 }
 
-private fun updateItem(item: Item): Item = when (item.name) {
+private fun updateItem(item: Item): Pair<Int, Int> = when (item.name) {
     "Sulfuras, Hand of Ragnaros" -> LegendaryItem
     "Aged Brie" -> AgedBrie
     "Backstage passes to a TAFKAL80ETC concert" -> BackstagePasses
     "Conjured Mana Cake" -> Conjured
     else -> NormalItem
 }.let {
-    item.copy(
-        quality = it.updateQuality(item.sellIn, item.quality),
-        sellIn = it.updateSellIn(item.sellIn)
+    Pair(
+        it.updateQuality(item.sellIn, item.quality),
+        it.updateSellIn(item.sellIn)
     )
 }
 
 object Conjured : ItemUpdater {
-    override fun updateQuality(sellIn: Int, quality: Int): Int {
-        return (0..1).fold(quality) { acc, _ ->
-            NormalItem.updateQuality(sellIn, quality = acc)
-        }
+    override fun updateQuality(sellIn: Int, quality: Int): Int = (0..1).fold(quality) { acc, _ ->
+        NormalItem.updateQuality(sellIn, quality = acc)
     }
 }
-
-private fun Item.copy(
-    name: String = this.name,
-    quality: Int = this.quality,
-    sellIn: Int = this.sellIn
-): Item = Item(
-    name, sellIn, quality
-)
-
-private operator fun Item.component1() = name
-private operator fun Item.component2() = quality
-private operator fun Item.component3() = sellIn
-
 
 private fun incrementQuality(quality: Int, by: Int = 1): Int = min(quality + by, 50)
 private fun decrementQuality(quality: Int, by: Int = 1): Int = max(quality - by, 0)
