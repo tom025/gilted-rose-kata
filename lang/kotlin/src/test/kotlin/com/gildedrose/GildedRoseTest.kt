@@ -11,10 +11,10 @@ class GildedRoseTest {
         val normalItem = Item("some normal item", 10, 1)
         val app = GildedRose(listOf(normalItem))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(0, normalItem.quality)
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(0, normalItem.quality)
     }
 
@@ -23,7 +23,7 @@ class GildedRoseTest {
         val normalItem = Item("some normal item", 10, 10)
         val app = GildedRose(listOf(normalItem))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(9, normalItem.quality)
         assertEquals(9, normalItem.sellIn)
     }
@@ -33,11 +33,11 @@ class GildedRoseTest {
         val normalItem = Item("some normal item", 1, 10)
         val app = GildedRose(listOf(normalItem))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(9, normalItem.quality)
         assertEquals(0, normalItem.sellIn)
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(7, normalItem.quality)
         assertEquals(-1, normalItem.sellIn)
     }
@@ -47,11 +47,11 @@ class GildedRoseTest {
         val agedBrie = Item("Aged Brie", 5, 49)
         val app = GildedRose(listOf(agedBrie))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(50, agedBrie.quality)
         assertEquals(4, agedBrie.sellIn)
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(50, agedBrie.quality)
         assertEquals(3, agedBrie.sellIn)
     }
@@ -61,11 +61,11 @@ class GildedRoseTest {
         val agedBrie = Item("Aged Brie", 1, 20)
         val app = GildedRose(listOf(agedBrie))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(21, agedBrie.quality)
         assertEquals(0, agedBrie.sellIn)
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(23, agedBrie.quality)
         assertEquals(-1, agedBrie.sellIn)
     }
@@ -79,7 +79,7 @@ class GildedRoseTest {
         )
         val app = GildedRose(listOf(legendaryItem))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(20, legendaryItem.quality)
         assertEquals(1, legendaryItem.sellIn)
     }
@@ -93,7 +93,7 @@ class GildedRoseTest {
         )
         val app = GildedRose(listOf(legendaryItem))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(21, legendaryItem.quality)
         assertEquals(10, legendaryItem.sellIn)
     }
@@ -107,7 +107,7 @@ class GildedRoseTest {
         )
         val app = GildedRose(listOf(legendaryItem))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(22, legendaryItem.quality)
         assertEquals(6, legendaryItem.sellIn)
     }
@@ -121,7 +121,7 @@ class GildedRoseTest {
         )
         val app = GildedRose(listOf(legendaryItem))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(23, legendaryItem.quality)
         assertEquals(4, legendaryItem.sellIn)
     }
@@ -135,7 +135,7 @@ class GildedRoseTest {
         )
         val app = GildedRose(listOf(legendaryItem))
 
-        app.updateQuality()
+        app.updateItems()
         assertEquals(0, legendaryItem.quality)
         assertEquals(-1, legendaryItem.sellIn)
     }

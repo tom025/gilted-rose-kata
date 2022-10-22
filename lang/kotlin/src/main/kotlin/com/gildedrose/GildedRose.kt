@@ -4,20 +4,25 @@ import kotlin.math.max
 import kotlin.math.min
 
 class GildedRose(private val items: List<Item>) {
-    fun updateQuality() {
-        items.forEach(::updateItem)
+    fun updateItems() {
+        items.forEach { item ->
+            val updatedItem = updateItem(item)
+            item.quality = updatedItem.quality
+            item.sellIn = updatedItem.sellIn
+        }
     }
 
-    private fun updateItem(item: Item) {
-        when (item.name) {
-            "Sulfuras, Hand of Ragnaros" -> LegendaryItem()
-            "Aged Brie" -> AgedBrie()
-            "Backstage passes to a TAFKAL80ETC concert" -> BackstagePasses()
-            else -> NormalItem()
-        }.apply {
-            item.quality = updateQuality(item)
-            item.sellIn = updateSellIn(item)
-        }
+    private fun updateItem(item: Item): Item = when (item.name) {
+        "Sulfuras, Hand of Ragnaros" -> LegendaryItem()
+        "Aged Brie" -> AgedBrie()
+        "Backstage passes to a TAFKAL80ETC concert" -> BackstagePasses()
+        else -> NormalItem()
+    }.let {
+        Item(
+            name = item.name,
+            quality = it.updateQuality(item),
+            sellIn = it.updateSellIn(item)
+        )
     }
 }
 
