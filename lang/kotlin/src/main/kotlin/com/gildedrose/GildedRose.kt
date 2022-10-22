@@ -1,5 +1,6 @@
 package com.gildedrose
 
+import kotlin.math.max
 import kotlin.math.min
 
 class GildedRose(private val items: List<Item>) {
@@ -26,19 +27,17 @@ class GildedRose(private val items: List<Item>) {
                 }
             }
             else -> {
-                decrementQuality(item)
-                if (item.sellIn <= 0) {
-                    decrementQuality(item)
+                when (item.sellIn) {
+                    in (1..Int.MAX_VALUE) -> decrementQuality(item)
+                    else -> decrementQuality(item, by = 2)
                 }
             }
         }
         if (item.name != "Sulfuras, Hand of Ragnaros") item.sellIn = item.sellIn - 1
     }
 
-    private fun decrementQuality(item: Item) {
-        if (item.quality > 0) {
-            item.quality = item.quality - 1
-        }
+    private fun decrementQuality(item: Item, by: Int = 1) {
+        item.quality = max(item.quality - by, 0)
     }
 
     private fun incrementQuality(item: Item, by: Int = 1) {
