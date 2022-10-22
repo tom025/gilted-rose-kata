@@ -6,25 +6,37 @@ import kotlin.math.min
 class GildedRose(private val items: List<Item>) {
     fun updateItems() {
         items.forEach { item ->
-            val updatedItem = updateItem(item)
-            item.quality = updatedItem.quality
-            item.sellIn = updatedItem.sellIn
+            updateItem(item).also { (_, quality, sellIn) ->
+                item.quality = quality
+                item.sellIn = sellIn
+            }
         }
     }
-
-    private fun updateItem(item: Item): Item = when (item.name) {
-        "Sulfuras, Hand of Ragnaros" -> LegendaryItem()
-        "Aged Brie" -> AgedBrie()
-        "Backstage passes to a TAFKAL80ETC concert" -> BackstagePasses()
-        else -> NormalItem()
-    }.let {
-        Item(
-            name = item.name,
-            quality = it.updateQuality(item),
-            sellIn = it.updateSellIn(item)
-        )
-    }
 }
+
+private fun updateItem(item: Item): Item = when (item.name) {
+    "Sulfuras, Hand of Ragnaros" -> LegendaryItem()
+    "Aged Brie" -> AgedBrie()
+    "Backstage passes to a TAFKAL80ETC concert" -> BackstagePasses()
+    else -> NormalItem()
+}.let {
+    item.copy(
+        quality = it.updateQuality(item),
+        sellIn = it.updateSellIn(item)
+    )
+}
+
+private fun Item.copy(
+    name: String = this.name,
+    quality: Int = this.quality,
+    sellIn: Int = this.sellIn
+): Item = Item(
+    name, sellIn, quality
+)
+
+private operator fun Item.component1() = name
+private operator fun Item.component2() = quality
+private operator fun Item.component3() = sellIn
 
 
 private fun incrementQuality(item: Item, by: Int = 1): Int = min(item.quality + by, 50)
@@ -53,11 +65,9 @@ class BackstagePasses : ItemUpdater {
 }
 
 class NormalItem : ItemUpdater {
-    override fun updateQuality(item: Item): Int {
-        return when (item.sellIn) {
-            in (1..Int.MAX_VALUE) -> decrementQuality(item)
-            else -> decrementQuality(item, by = 2)
-        }
+    override fun updateQuality(item: Item): Int = when (item.sellIn) {
+        in (1..Int.MAX_VALUE) -> decrementQuality(item)
+        else -> decrementQuality(item, by = 2)
     }
 }
 
