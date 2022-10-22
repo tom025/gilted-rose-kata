@@ -8,4 +8,6 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
-rootProject.name = "guilded-rose-kata"
+rootProject.name = "gilded-rose-kata"
+
+include(":lang:kotlin")
