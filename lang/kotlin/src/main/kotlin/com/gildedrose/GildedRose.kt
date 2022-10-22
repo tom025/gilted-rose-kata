@@ -6,41 +6,41 @@ class GildedRose(private val items: List<Item>) {
     }
 
     private fun updateItem(item: Item) {
-        if (item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert") {
-            if (item.name != "Sulfuras, Hand of Ragnaros") {
-                decrementQuality(item)
+        when (item.name) {
+            "Sulfuras, Hand of Ragnaros" -> { /* Do nothing */
             }
-        } else {
-            if (item.quality < 50) {
-                incrementQuality(item)
-
-                if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-                    if (item.sellIn < 11) {
-                        incrementQuality(item)
-                    }
-
-                    if (item.sellIn < 6) {
-                        incrementQuality(item)
-                    }
-                }
-            }
-        }
-
-        if (item.name != "Sulfuras, Hand of Ragnaros") {
-            item.sellIn = item.sellIn - 1
-        }
-
-        if (item.sellIn < 0) {
-            if (item.name != "Aged Brie") {
-                if (item.name != "Backstage passes to a TAFKAL80ETC concert") {
-                    if (item.name != "Sulfuras, Hand of Ragnaros") {
-                        decrementQuality(item)
-                    }
+            else -> {
+                if (item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert") {
+                    decrementQuality(item)
                 } else {
-                    item.quality = 0
+                    if (item.quality < 50) {
+                        incrementQuality(item)
+
+                        if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+                            if (item.sellIn < 11) {
+                                incrementQuality(item)
+                            }
+
+                            if (item.sellIn < 6) {
+                                incrementQuality(item)
+                            }
+                        }
+                    }
                 }
-            } else {
-                incrementQuality(item)
+
+                item.sellIn = item.sellIn - 1
+
+                if (item.sellIn < 0) {
+                    if (item.name != "Aged Brie") {
+                        if (item.name != "Backstage passes to a TAFKAL80ETC concert") {
+                            decrementQuality(item)
+                        } else {
+                            item.quality = 0
+                        }
+                    } else {
+                        incrementQuality(item)
+                    }
+                }
             }
         }
     }
