@@ -9,36 +9,34 @@ class GildedRose(private val items: List<Item>) {
         when (item.name) {
             "Sulfuras, Hand of Ragnaros" -> { /* Do nothing */
             }
+
             else -> {
-                if (item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert") {
-                    decrementQuality(item)
-                } else {
-                    if (item.quality < 50) {
-                        incrementQuality(item)
+                if (item.name == "Aged Brie" || item.name == "Backstage passes to a TAFKAL80ETC concert") {
+                    incrementQuality(item)
+                    if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+                        if (item.sellIn < 11) {
+                            incrementQuality(item)
+                        }
 
-                        if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-                            if (item.sellIn < 11) {
-                                incrementQuality(item)
-                            }
-
-                            if (item.sellIn < 6) {
-                                incrementQuality(item)
-                            }
+                        if (item.sellIn < 6) {
+                            incrementQuality(item)
                         }
                     }
+                } else {
+                    decrementQuality(item)
                 }
 
                 item.sellIn = item.sellIn - 1
 
                 if (item.sellIn < 0) {
-                    if (item.name != "Aged Brie") {
-                        if (item.name != "Backstage passes to a TAFKAL80ETC concert") {
-                            decrementQuality(item)
-                        } else {
-                            item.quality = 0
-                        }
-                    } else {
+                    if (item.name == "Aged Brie") {
                         incrementQuality(item)
+                    } else {
+                        if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+                            item.quality = 0
+                        } else {
+                            decrementQuality(item)
+                        }
                     }
                 }
             }
