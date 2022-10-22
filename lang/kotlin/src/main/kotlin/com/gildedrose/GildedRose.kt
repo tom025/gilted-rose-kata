@@ -15,10 +15,10 @@ class GildedRose(private val items: List<Item>) {
 }
 
 private fun updateItem(item: Item): Item = when (item.name) {
-    "Sulfuras, Hand of Ragnaros" -> LegendaryItem()
-    "Aged Brie" -> AgedBrie()
-    "Backstage passes to a TAFKAL80ETC concert" -> BackstagePasses()
-    else -> NormalItem()
+    "Sulfuras, Hand of Ragnaros" -> LegendaryItem
+    "Aged Brie" -> AgedBrie
+    "Backstage passes to a TAFKAL80ETC concert" -> BackstagePasses
+    else -> NormalItem
 }.let {
     item.copy(
         quality = it.updateQuality(item),
@@ -42,20 +42,20 @@ private operator fun Item.component3() = sellIn
 private fun incrementQuality(item: Item, by: Int = 1): Int = min(item.quality + by, 50)
 private fun decrementQuality(item: Item, by: Int = 1): Int = max(item.quality - by, 0)
 
-class LegendaryItem : ItemUpdater {
+object LegendaryItem : ItemUpdater {
     override fun updateQuality(item: Item) = item.quality
 
     override fun updateSellIn(item: Item) = item.sellIn
 }
 
-class AgedBrie : ItemUpdater {
+object AgedBrie : ItemUpdater {
     override fun updateQuality(item: Item): Int = when (item.sellIn) {
         in 1..Int.MAX_VALUE -> incrementQuality(item, by = 1)
         else -> incrementQuality(item, by = 2)
     }
 }
 
-class BackstagePasses : ItemUpdater {
+object BackstagePasses : ItemUpdater {
     override fun updateQuality(item: Item): Int = when (item.sellIn) {
         in (11..Int.MAX_VALUE) -> incrementQuality(item)
         in (6..10) -> incrementQuality(item, by = 2)
@@ -64,7 +64,7 @@ class BackstagePasses : ItemUpdater {
     }
 }
 
-class NormalItem : ItemUpdater {
+object NormalItem : ItemUpdater {
     override fun updateQuality(item: Item): Int = when (item.sellIn) {
         in (1..Int.MAX_VALUE) -> decrementQuality(item)
         else -> decrementQuality(item, by = 2)
