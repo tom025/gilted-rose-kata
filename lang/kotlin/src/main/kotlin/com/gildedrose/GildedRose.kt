@@ -1,5 +1,7 @@
 package com.gildedrose
 
+import kotlin.math.min
+
 class GildedRose(private val items: List<Item>) {
     fun updateQuality() {
         items.forEach(::updateItem)
@@ -10,21 +12,17 @@ class GildedRose(private val items: List<Item>) {
             "Sulfuras, Hand of Ragnaros" -> { /* Do nothing */
             }
             "Aged Brie" -> {
-                incrementQuality(item)
-                if (item.sellIn <= 0) {
-                    incrementQuality(item)
+                when (item.sellIn) {
+                    in 1..Int.MAX_VALUE -> incrementQuality(item, by = 1)
+                    else -> incrementQuality(item, by = 2)
                 }
             }
             "Backstage passes to a TAFKAL80ETC concert" -> {
-                incrementQuality(item)
-                if (item.sellIn <= 10) {
-                    incrementQuality(item)
-                }
-                if (item.sellIn <= 5) {
-                    incrementQuality(item)
-                }
-                if (item.sellIn <= 0) {
-                    item.quality = 0
+                when (item.sellIn) {
+                    in (11..Int.MAX_VALUE) -> incrementQuality(item)
+                    in (6..10) -> incrementQuality(item, by = 2)
+                    in (1..5) -> incrementQuality(item, by = 3)
+                    else -> item.quality = 0
                 }
             }
             else -> {
@@ -43,9 +41,7 @@ class GildedRose(private val items: List<Item>) {
         }
     }
 
-    private fun incrementQuality(item: Item) {
-        if (item.quality < 50) {
-            item.quality = item.quality + 1
-        }
+    private fun incrementQuality(item: Item, by: Int = 1) {
+        item.quality = min(item.quality + by, 50)
     }
 }
