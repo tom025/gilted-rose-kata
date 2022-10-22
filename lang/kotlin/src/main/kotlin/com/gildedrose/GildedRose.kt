@@ -14,11 +14,11 @@ class GildedRose(private val items: List<Item>) {
                 if (item.name == "Aged Brie" || item.name == "Backstage passes to a TAFKAL80ETC concert") {
                     incrementQuality(item)
                     if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-                        if (item.sellIn < 11) {
+                        if (item.sellIn <= 10) {
                             incrementQuality(item)
                         }
 
-                        if (item.sellIn < 6) {
+                        if (item.sellIn <= 5) {
                             incrementQuality(item)
                         }
                     }
@@ -26,9 +26,8 @@ class GildedRose(private val items: List<Item>) {
                     decrementQuality(item)
                 }
 
-                item.sellIn = item.sellIn - 1
 
-                if (item.sellIn < 0) {
+                if (item.sellIn <= 0) {
                     if (item.name == "Aged Brie") {
                         incrementQuality(item)
                     } else {
@@ -39,6 +38,7 @@ class GildedRose(private val items: List<Item>) {
                         }
                     }
                 }
+                item.sellIn = item.sellIn - 1
             }
         }
     }
