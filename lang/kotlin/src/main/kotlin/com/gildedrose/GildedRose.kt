@@ -10,17 +10,22 @@ class GildedRose(private val items: List<Item>) {
             "Sulfuras, Hand of Ragnaros" -> { /* Do nothing */
             }
 
-            else -> {
-                if (item.name == "Aged Brie" || item.name == "Backstage passes to a TAFKAL80ETC concert") {
+            "Aged Brie" -> {
+                incrementQuality(item)
+                if (item.sellIn <= 0) {
                     incrementQuality(item)
-                    if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-                        if (item.sellIn <= 10) {
-                            incrementQuality(item)
-                        }
+                }
+            }
 
-                        if (item.sellIn <= 5) {
-                            incrementQuality(item)
-                        }
+            else -> {
+                if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+                    incrementQuality(item)
+                    if (item.sellIn <= 10) {
+                        incrementQuality(item)
+                    }
+
+                    if (item.sellIn <= 5) {
+                        incrementQuality(item)
                     }
                 } else {
                     decrementQuality(item)
@@ -28,19 +33,15 @@ class GildedRose(private val items: List<Item>) {
 
 
                 if (item.sellIn <= 0) {
-                    if (item.name == "Aged Brie") {
-                        incrementQuality(item)
+                    if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+                        item.quality = 0
                     } else {
-                        if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-                            item.quality = 0
-                        } else {
-                            decrementQuality(item)
-                        }
+                        decrementQuality(item)
                     }
                 }
-                item.sellIn = item.sellIn - 1
             }
         }
+        if (item.name != "Sulfuras, Hand of Ragnaros") item.sellIn = item.sellIn - 1
     }
 
     private fun decrementQuality(item: Item) {
