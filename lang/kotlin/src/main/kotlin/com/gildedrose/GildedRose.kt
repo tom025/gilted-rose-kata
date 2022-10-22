@@ -9,35 +9,28 @@ class GildedRose(private val items: List<Item>) {
         when (item.name) {
             "Sulfuras, Hand of Ragnaros" -> { /* Do nothing */
             }
-
             "Aged Brie" -> {
                 incrementQuality(item)
                 if (item.sellIn <= 0) {
                     incrementQuality(item)
                 }
             }
-
-            else -> {
-                if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+            "Backstage passes to a TAFKAL80ETC concert" -> {
+                incrementQuality(item)
+                if (item.sellIn <= 10) {
                     incrementQuality(item)
-                    if (item.sellIn <= 10) {
-                        incrementQuality(item)
-                    }
-
-                    if (item.sellIn <= 5) {
-                        incrementQuality(item)
-                    }
-                } else {
-                    decrementQuality(item)
                 }
-
-
+                if (item.sellIn <= 5) {
+                    incrementQuality(item)
+                }
                 if (item.sellIn <= 0) {
-                    if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-                        item.quality = 0
-                    } else {
-                        decrementQuality(item)
-                    }
+                    item.quality = 0
+                }
+            }
+            else -> {
+                decrementQuality(item)
+                if (item.sellIn <= 0) {
+                    decrementQuality(item)
                 }
             }
         }
