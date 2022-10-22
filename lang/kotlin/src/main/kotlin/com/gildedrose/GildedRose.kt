@@ -18,12 +18,19 @@ private fun updateItem(item: Item): Item = when (item.name) {
     "Sulfuras, Hand of Ragnaros" -> LegendaryItem
     "Aged Brie" -> AgedBrie
     "Backstage passes to a TAFKAL80ETC concert" -> BackstagePasses
+    "Conjured Mana Cake" -> Conjured
     else -> NormalItem
 }.let {
     item.copy(
         quality = it.updateQuality(item),
         sellIn = it.updateSellIn(item)
     )
+}
+
+object Conjured: ItemUpdater {
+    override fun updateQuality(item: Item): Int = (0..1).fold(item.quality) { acc, _ ->
+        NormalItem.updateQuality(item.copy(quality = acc))
+    }
 }
 
 private fun Item.copy(

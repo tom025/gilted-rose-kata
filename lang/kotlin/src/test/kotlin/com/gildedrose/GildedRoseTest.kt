@@ -139,4 +139,22 @@ class GildedRoseTest {
         assertEquals(0, legendaryItem.quality)
         assertEquals(-1, legendaryItem.sellIn)
     }
+
+    @Test
+    fun updateQuality_conjured_items_degrade_twice_as_fast_as_normal_items() {
+        val item = Item(
+            "Conjured Mana Cake",
+            1,
+            20
+        )
+        val app = GildedRose(listOf(item))
+
+        app.updateItems()
+        assertEquals(18, item.quality)
+        assertEquals(0, item.sellIn)
+
+        app.updateItems()
+        assertEquals(14, item.quality)
+        assertEquals(-1, item.sellIn)
+    }
 }
