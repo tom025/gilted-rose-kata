@@ -22,14 +22,16 @@ private fun updateItem(item: Item): Item = when (item.name) {
     else -> NormalItem
 }.let {
     item.copy(
-        quality = it.updateQuality(item),
-        sellIn = it.updateSellIn(item)
+        quality = it.updateQuality(item.sellIn, item.quality),
+        sellIn = it.updateSellIn(item.sellIn)
     )
 }
 
-object Conjured: ItemUpdater {
-    override fun updateQuality(item: Item): Int = (0..1).fold(item.quality) { acc, _ ->
-        NormalItem.updateQuality(item.copy(quality = acc))
+object Conjured : ItemUpdater {
+    override fun updateQuality(sellIn: Int, quality: Int): Int {
+        return (0..1).fold(quality) { acc, _ ->
+            NormalItem.updateQuality(sellIn, quality = acc)
+        }
     }
 }
 
@@ -46,39 +48,39 @@ private operator fun Item.component2() = quality
 private operator fun Item.component3() = sellIn
 
 
-private fun incrementQuality(item: Item, by: Int = 1): Int = min(item.quality + by, 50)
-private fun decrementQuality(item: Item, by: Int = 1): Int = max(item.quality - by, 0)
+private fun incrementQuality(quality: Int, by: Int = 1): Int = min(quality + by, 50)
+private fun decrementQuality(quality: Int, by: Int = 1): Int = max(quality - by, 0)
 
 object LegendaryItem : ItemUpdater {
-    override fun updateQuality(item: Item) = item.quality
+    override fun updateQuality(sellIn: Int, quality: Int): Int = quality
 
-    override fun updateSellIn(item: Item) = item.sellIn
+    override fun updateSellIn(sellIn: Int) = sellIn
 }
 
 object AgedBrie : ItemUpdater {
-    override fun updateQuality(item: Item): Int = when (item.sellIn) {
-        in 1..Int.MAX_VALUE -> incrementQuality(item, by = 1)
-        else -> incrementQuality(item, by = 2)
+    override fun updateQuality(sellIn: Int, quality: Int): Int = when (sellIn) {
+        in 1..Int.MAX_VALUE -> incrementQuality(quality, by = 1)
+        else -> incrementQuality(quality, by = 2)
     }
 }
 
 object BackstagePasses : ItemUpdater {
-    override fun updateQuality(item: Item): Int = when (item.sellIn) {
-        in (11..Int.MAX_VALUE) -> incrementQuality(item)
-        in (6..10) -> incrementQuality(item, by = 2)
-        in (1..5) -> incrementQuality(item, by = 3)
+    override fun updateQuality(sellIn: Int, quality: Int): Int = when (sellIn) {
+        in 11..Int.MAX_VALUE -> incrementQuality(quality)
+        in 6..10 -> incrementQuality(quality, by = 2)
+        in 1..5 -> incrementQuality(quality, by = 3)
         else -> 0
     }
 }
 
 object NormalItem : ItemUpdater {
-    override fun updateQuality(item: Item): Int = when (item.sellIn) {
-        in (1..Int.MAX_VALUE) -> decrementQuality(item)
-        else -> decrementQuality(item, by = 2)
+    override fun updateQuality(sellIn: Int, quality: Int) = when (sellIn) {
+        in 1..Int.MAX_VALUE -> decrementQuality(quality)
+        else -> decrementQuality(quality, by = 2)
     }
 }
 
 interface ItemUpdater {
-    fun updateQuality(item: Item): Int
-    fun updateSellIn(item: Item): Int = item.sellIn - 1
+    fun updateQuality(sellIn: Int, quality: Int): Int
+    fun updateSellIn(sellIn: Int): Int = sellIn - 1
 }
